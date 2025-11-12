@@ -1,0 +1,16 @@
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 0.85em;
+    font-weight: bold;
+}
+
+.status-badge.dipinjam {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.status-badge.kembali {
+    background-color: #28a745;
+}

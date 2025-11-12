@@ -1,0 +1,15 @@
+.btn-aksi {
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+    color: white;
+    margin-right: 5px;
+    font-size: 0.9em;
+}
+
+.btn-aksi.edit {
+    background-color: #17a2b8;
+}
+.btn-aksi.hapus {
+    background-color: #dc3545;
+}
