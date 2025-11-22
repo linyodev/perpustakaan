@@ -204,7 +204,6 @@ body {
     white-space: nowrap;
     margin-bottom: 30px;
     border-radius: 8px;
-    transform: rotate(-1deg);
 }
 
 .marquee-content {
@@ -353,7 +352,6 @@ body {
 }
 
 .cta-dense {
-    background: url('https://www.transparenttextures.com/patterns/cubes.png'), linear-gradient(135deg, #e0e7ff, #f3e8ff);
     padding: 40px;
     border-radius: var(--radius-lg);
     display: flex;
@@ -389,10 +387,7 @@ body {
         display: none;
     }
 
-    .bento-grid {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-    }
+
 
     .box-large,
     .box-tall,

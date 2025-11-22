@@ -1,6 +1,4 @@
 <?php
-// Di aplikasi nyata, Anda akan memiliki logika untuk menentukan link mana yang akan ditampilkan
-// berdasarkan status login (session). Untuk frontend ini, kita tampilkan semua sebagai contoh.
 $is_admin = strpos($_SERVER['REQUEST_URI'], '/admin/') !== false;
 ?>
 <!DOCTYPE html>
@@ -12,10 +10,6 @@ $is_admin = strpos($_SERVER['REQUEST_URI'], '/admin/') !== false;
     <title><?php echo $pageTitle; ?> - Perpustakaan Umum</title>
     <link rel="stylesheet" href="/perpustakaan/assets/css/global.css">
     <link rel="stylesheet" href="<?php echo $cssFile; ?>">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -35,6 +29,8 @@ $is_admin = strpos($_SERVER['REQUEST_URI'], '/admin/') !== false;
                         <li><a href="/perpustakaan/history-peminjaman/">History Peminjaman</a></li>
                         <li><a href="/perpustakaan/edit-profil/">Edit Profil</a></li>
                         <li><a href="/perpustakaan/login/">Login</a></li>
+                        <li><a href="/perpustakaan/login/">Admin Login</a></li>
+
                     <?php endif; ?>
                 </ul>
             </nav>

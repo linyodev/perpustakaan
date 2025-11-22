@@ -8,16 +8,16 @@ include('../templates/header.php');
     <h2 class="page-title">Register Anggota</h2>
     <form action="" method="POST">
         <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" >
         </div>
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+            <input type="text" id="password" name="password" >
         </div>
         <div class="form-group">
             <label for="password2">Retype Password</label>
-            <input type="password" id="password2" name="password2" required>
+            <input type="text" id="password2" name="password2" >
         </div>
         <button type="submit" class="btn">Register</button>
         <p class="form-link">Sudah punya akun? <a href="/perpustakaan/login/">Login di sini</a></p>

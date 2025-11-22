@@ -9,11 +9,11 @@ include('../templates/header.php');
     <form action="" method="POST">
         <div class="form-group">
             <label for="nama_lengkap">Nama Lengkap</label>
-            <input type="text" id="nama_lengkap" name="nama_lengkap" value="John Doe" required>
+            <input type="text" id="nama_lengkap" name="nama_lengkap" value="John Doe" >
         </div>
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="johndoe@example.com" required>
+            <input type="text" id="email" name="email" value="johndoe@example.com" >
         </div>
         <div class="form-group">
             <label for="No HP">Ho HP</label>
@@ -21,18 +21,18 @@ include('../templates/header.php');
         </div>
          <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" id="username" name="username" value="johndoe" disabled>
+            <input type="text" id="username" name="username" value="johndoe" >
             <small>Username tidak dapat diubah.</small>
         </div>
         <hr>
         <p><strong>Ubah Password (opsional)</strong></p>
         <div class="form-group">
             <label for="current_password">Password Saat Ini</label>
-            <input type="password" id="current_password" name="current_password">
+            <input type="text" id="current_password" name="current_password">
         </div>
         <div class="form-group">
             <label for="new_password">Password Baru</label>
-            <input type="password" id="new_password" name="new_password">
+            <input type="text" id="new_password" name="new_password">
         </div>
         <button type="submit" class="btn">Simpan Perubahan</button>
     </form>
