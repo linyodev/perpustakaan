@@ -16,6 +16,10 @@ include('../templates/header.php');
             <input type="email" id="email" name="email" value="johndoe@example.com" required>
         </div>
         <div class="form-group">
+            <label for="No HP">Ho HP</label>
+            <input type="text" id="Ho HP" name="no" >
+        </div>
+         <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" value="johndoe" disabled>
             <small>Username tidak dapat diubah.</small>
