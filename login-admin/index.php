@@ -5,7 +5,7 @@ include('../templates/header.php');
 ?>
 
 <div class="form-container">
-    <h2 class="page-title">Login Pemustaka</h2>
+    <h2 class="page-title">Login Admin</h2>
     <form action="" method="POST">
         <div class="form-group">
             <label for="username">Username</label>
@@ -16,7 +16,6 @@ include('../templates/header.php');
             <input type="text" id="password" name="password" >
         </div>
         <button type="submit" class="btn">Login</button>
-        <p class="form-link">Belum punya akun? <a href="/perpustakaan/register/">Register di sini</a></p>
     </form>
 </div>
 

@@ -28,8 +28,8 @@ $is_admin = strpos($_SERVER['REQUEST_URI'], '/admin/') !== false;
                         <li><a href="/perpustakaan/koleksi-buku/">Koleksi Buku</a></li>
                         <li><a href="/perpustakaan/history-peminjaman/">History Peminjaman</a></li>
                         <li><a href="/perpustakaan/edit-profil/">Edit Profil</a></li>
-                        <li><a href="/perpustakaan/login/">Login</a></li>
-                        <li><a href="/perpustakaan/login/">Admin Login</a></li>
+                        <li><a href="/perpustakaan/login/">Pemustaka Login</a></li>
+                        <li><a href="/perpustakaan/login-admin/">Admin Login</a></li>
 
                     <?php endif; ?>
                 </ul>
