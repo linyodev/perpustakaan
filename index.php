@@ -13,30 +13,30 @@ include('templates/header.php');
             </div>
             
             <h1>Akses Literasi <br><span class="gradient-text">Tanpa Batas Ruang.</span></h1>
-            <p>Platform perpustakaan digital terintegrasi. Pinjam buku fisik, baca e-book, atau akses jurnal internasional dalam satu akun.</p>
+            <p>Platform perpustakaan digital terintegrasi. Pinjam buku fisik, baca e-book dalam satu akun.</p>
             
 
             <div class="hero-stats-row">
                 <div class="stat-mini">
-                    <strong>12K+</strong> <span><i class="fas fa-book"></i> Buku</span>
+                    <strong>12K+</strong> <span> Buku</span>
                 </div>
                 <div class="stat-mini">
-                    <strong>500+</strong> <span><i class="fas fa-newspaper"></i> Jurnal</span>
+                    <strong>500+</strong> <span> Jurnal</span>
                 </div>
                 <div class="stat-mini">
-                    <strong>4.9</strong> <span><i class="fas fa-star text-warning"></i> Rating</span>
+                    <strong>4.9</strong> <span> Rating</span>
                 </div>
             </div>
         </div>
         
         <div class="hero-visual">
             <div class="floating-card card-1">
-                <span>Sedang Dibaca</span>
-                <strong>Atomic Habits</strong>
+                <span>Permudah Anda Jadi Lebih</span>
+                <strong>Hobi Membaca</strong>
             </div>
             <div class="floating-card card-2">
-                <span>Pengembalian</span>
-                <strong>Tepat Waktu</strong>
+                <span>Temukan</span>
+                <strong>Bermacam Macam Buku</strong>
             </div>
             <img src="./assets/img/books.png" alt="Library" class="hero-img">
         </div>
