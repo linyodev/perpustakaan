@@ -2,6 +2,22 @@
 $pageTitle = "Koleksi Buku";
 $cssFile = "/perpustakaan/assets/css/koleksi_buku.css";
 include('../templates/header.php');
+
+require_once('../includes/db_config.php');
+try {
+    $conn = get_db_connection();
+    $stmt = $conn->prepare("SELECT * FROM buku");
+    $stmt->execute();   
+    $buku = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (!$buku) {
+        header("Location: kelola_buku.php");
+        exit();
+    }
+} catch(PDOException $e) {
+    die("Error: Gagal mengambil data");
+}
+
 ?>
 
 <h2 class="page-title">Daftar Koleksi Buku</h2>
@@ -12,29 +28,15 @@ include('../templates/header.php');
 </div>
 
 <div class="book-grid">
+    <?php foreach($buku as $b)  {?>
     <div class="book-card">
-        <img src="https://via.placeholder.com/150x220.png?text=Cover+Buku" alt="Cover Buku">
-        <h3>Laskar Pelangi</h3>
-        <p class="author">Andrea Hirata</p>
-        <p class="status tersedia">Status: Tersedia</p>
-        <a href="#" class="btn">Pinjam</a>
+        <h3><?= $b['judul'] ?></h3>
+        <p class="author"><?= $b['penulis']?></p>
+        <p class="status <?= ($b['jumlah'] > 0) ? 'tersedia' : '' ?>">Status: <?= ($b['jumlah'] > 0) ? "Tersedia" : "Tidak Tersedia" ?></p>
+        <a href="process.php?id=<?= $b['id_buku'] ?>" class="btn">Pinjam</a>
     </div>
-
-    <div class="book-card">
-        <img src="https://via.placeholder.com/150x220.png?text=Cover+Buku" alt="Cover Buku">
-        <h3>Bumi Manusia</h3>
-        <p class="author">Pramoedya Ananta Toer</p>
-        <p class="status dipinjam">Status: Dipinjam</p>
-        <a href="#" class="btn" disabled>Pinjam</a>
-    </div>
-
-    <div class="book-card">
-        <img src="https://via.placeholder.com/150x220.png?text=Cover+Buku" alt="Cover Buku">
-        <h3>Negeri 5 Menara</h3>
-        <p class="author">Ahmad Fuadi</p>
-        <p class="status tersedia">Status: Tersedia</p>
-        <a href="#" class="btn">Pinjam</a>
-    </div>
+    <?php } ?>
+   
 </div>
 
 <?php include('../templates/footer.php'); ?>

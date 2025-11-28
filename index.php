@@ -1,4 +1,5 @@
 <?php
+require "includes/authorization.php";
 $pageTitle = "Digital Library Hub";
 $cssFile = "/perpustakaan/assets/css/home.css"; 
 include('templates/header.php'); 

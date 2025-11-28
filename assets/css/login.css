@@ -12,3 +12,16 @@
 .form-container .form-link a:hover {
     text-decoration: underline;
 }
+
+.error-message {
+    background: #fee;
+    color: #c33;
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #fcc;
+}
+
+.error-message ul {
+    margin-left: 20px;
+}
