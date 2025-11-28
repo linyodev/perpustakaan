@@ -57,7 +57,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: index.php");
         exit();
     }
-    $conn = null;
 } else {
     header("Location: index.php");
     exit();

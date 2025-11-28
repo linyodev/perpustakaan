@@ -1,4 +1,7 @@
 <?php
+session_start();
+require_once('../includes/authorization.php');
+
 $pageTitle = "Koleksi Buku";
 $cssFile = "/perpustakaan/assets/css/koleksi_buku.css";
 include('../templates/header.php');
@@ -10,12 +13,8 @@ try {
     $stmt->execute();   
     $buku = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    if (!$buku) {
-        header("Location: kelola_buku.php");
-        exit();
-    }
 } catch(PDOException $e) {
-    die("Error: Gagal mengambil data");
+    die("Error: Gagal mengambil data buku.");
 }
 
 ?>
@@ -28,14 +27,17 @@ try {
 </div>
 
 <div class="book-grid">
-    <?php foreach($buku as $b)  {?>
+    <?php foreach($buku as $b)  :?>
     <div class="book-card">
-        <h3><?= $b['judul'] ?></h3>
-        <p class="author"><?= $b['penulis']?></p>
-        <p class="status <?= ($b['jumlah'] > 0) ? 'tersedia' : '' ?>">Status: <?= ($b['jumlah'] > 0) ? "Tersedia" : "Tidak Tersedia" ?></p>
-        <a href="process.php?id=<?= $b['id_buku'] ?>" class="btn">Pinjam</a>
+        <h3><?= htmlspecialchars($b['judul']) ?></h3>
+        <p class="author"><?= htmlspecialchars($b['penulis'])?></p>
+        <p class="status <?= ($b['jumlah'] > 0) ? 'tersedia' : 'tidak-tersedia' ?>">
+            Status: <?= ($b['jumlah'] > 0) ? "Tersedia" : "Tidak Tersedia" ?> (<?= htmlspecialchars($b['jumlah']) ?>)
+        </p>
+            <a href="process.php?id=<?= $b['id_buku'] ?>" class="btn">Pinjam</a>
+        
     </div>
-    <?php } ?>
+    <?php endforeach; ?>
    
 </div>
 

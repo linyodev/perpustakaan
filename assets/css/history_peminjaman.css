@@ -10,7 +10,12 @@
     background-color: #ffc107;
     color: #333;
 }
+.status-badge.dikembalikan {
+
+    background-color: #28a745;
+}
 
 .status-badge.kembali {
-    background-color: #28a745;
+        background-color: #ffc107;
+    color: #333;
 }
