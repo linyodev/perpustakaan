@@ -61,6 +61,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Sampul</th>
                             <th>Judul</th>
                             <th>Penulis</th>
                             <th>Penerbit</th>
@@ -75,6 +76,13 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF
                             <?php foreach($buku_list as $buku): ?>
                                 <tr>
                                     <td><?php echo htmlspecialchars($buku['id_buku'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td>
+                                        <?php if (!empty($buku['sampul'])): ?>
+                                            <img src="../assets/uploads/<?php echo htmlspecialchars($buku['sampul'], ENT_QUOTES, 'UTF-8'); ?>" alt="Sampul" style="width: 50px; height: auto;">
+                                        <?php else: ?>
+                                            <img src="https://via.placeholder.com/50x70.png?text=N/A" alt="Tidak ada sampul">
+                                        <?php endif; ?>
+                                    </td>
                                     <td><?php echo htmlspecialchars($buku['judul'], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td><?php echo htmlspecialchars($buku['penulis'], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td><?php echo htmlspecialchars($buku['penerbit'], ENT_QUOTES, 'UTF-8'); ?></td>
@@ -89,7 +97,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="8" class="text-center">Belum ada data buku</td>
+                                <td colspan="9" class="text-center">Belum ada data buku</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

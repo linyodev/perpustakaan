@@ -41,7 +41,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?php echo date('d F Y', strtotime($row['tanggal_pinjam'])); ?></td>
                     <td><?php echo $row['tanggal_kembali'] ? date('d F Y', strtotime($row['tanggal_kembali'])) : 'Belum dikembalikan'; ?></td>
                     <td>
-                        <span class="status-badge <?php echo strtolower(str_replace(' ', '-', $row['status'])); ?>">
+                        <span  class="status-badge status-<?php echo strtolower(str_replace(' ', '-', $row['status'])); ?>">
                             <?php echo htmlspecialchars($row['status']); ?>
                         </span>
                     </td>

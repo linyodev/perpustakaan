@@ -34,7 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tahun = isset($_POST['tahun']) ? trim($_POST['tahun']) : "";
     $kategori = isset($_POST['kategori']) ? trim($_POST['kategori']) : "";
     $jumlah = isset($_POST['jumlah']) ? trim($_POST['jumlah']) : "";
-    
+    $sampul_lama = isset($_POST['sampul_lama']) ? $_POST['sampul_lama'] : "";
+    $sampul = $sampul_lama;
+
     if (!validasiWajibDiisi($judul)) {
         $errors[] = "Judul buku wajib diisi";
     }
@@ -82,6 +84,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     elseif (strlen($jumlah) > 11) {
         $errors[] = "Jumlah stok maksimal 11 digit";
     }
+
+    if (isset($_FILES['sampul']) && $_FILES['sampul']['error'] == UPLOAD_ERR_OK) {
+        $file = $_FILES['sampul'];
+        $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+        $max_size = 2 * 1024 * 1024; // 2MB
+
+        if (!in_array($file['type'], $allowed_types)) {
+            $errors[] = "Format file sampul tidak valid. Gunakan JPG, PNG, atau GIF.";
+        } elseif ($file['size'] > $max_size) {
+            $errors[] = "Ukuran file sampul maksimal 2MB.";
+        } else {
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $sampul = uniqid('buku_') . '.' . $ext;
+            $upload_dir = '../assets/uploads/';
+            
+            if (!is_dir($upload_dir)) {
+                mkdir($upload_dir, 0777, true);
+            }
+
+            if (move_uploaded_file($file['tmp_name'], $upload_dir . $sampul)) {
+                if (!empty($sampul_lama) && file_exists($upload_dir . $sampul_lama)) {
+                    unlink($upload_dir . $sampul_lama);
+                }
+            } else {
+                $errors[] = "Gagal mengupload file sampul.";
+                $sampul = $sampul_lama;
+            }
+        }
+    }
     
     if (empty($errors)) {
         try {
@@ -90,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $penerbit = sanitizeInput($penerbit);
             $kategori = sanitizeInput($kategori);
             
-            $stmt = $conn->prepare("UPDATE buku SET judul = :judul, penulis = :penulis, penerbit = :penerbit, tahun = :tahun, kategori = :kategori, jumlah = :jumlah WHERE id_buku = :id");
+            $stmt = $conn->prepare("UPDATE buku SET judul = :judul, penulis = :penulis, penerbit = :penerbit, tahun = :tahun, kategori = :kategori, jumlah = :jumlah, sampul = :sampul WHERE id_buku = :id");
             
             $stmt->bindParam(':judul', $judul, PDO::PARAM_STR);
             $stmt->bindParam(':penulis', $penulis, PDO::PARAM_STR);
@@ -98,6 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(':tahun', $tahun, PDO::PARAM_STR);
             $stmt->bindParam(':kategori', $kategori, PDO::PARAM_STR);
             $stmt->bindParam(':jumlah', $jumlah, PDO::PARAM_INT);
+            $stmt->bindParam(':sampul', $sampul, PDO::PARAM_STR);
             $stmt->bindParam(':id', $id_buku, PDO::PARAM_INT);
             $stmt->execute();
             
@@ -157,7 +189,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF
                     </div>
                 <?php endif; ?>
                 
-                <form action="edit_buku.php?id=<?php echo $id_buku; ?>" method="POST" class="data-form">
+                <form action="edit_buku.php?id=<?php echo $id_buku; ?>" method="POST" enctype="multipart/form-data" class="data-form">
                     <div class="form-group">
                         <label for="judul">Judul Buku: <span class="required">*</span></label>
                         <input type="text" id="judul" name="judul" value="<?php echo htmlspecialchars($buku['judul'], ENT_QUOTES, 'UTF-8'); ?>">
@@ -192,6 +224,18 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF
                         <label for="jumlah">Jumlah Stok: <span class="required">*</span></label>
                         <input type="text" id="jumlah" name="jumlah" value="<?php echo htmlspecialchars($buku['jumlah'], ENT_QUOTES, 'UTF-8'); ?>">
                         <small class="form-hint">Maksimal 11 digit, hanya angka positif</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sampul">Sampul Buku:</label>
+                        <?php if (!empty($buku['sampul'])): ?>
+                            <div class="current-cover">
+                                <img src="../assets/uploads/<?php echo htmlspecialchars($buku['sampul'], ENT_QUOTES, 'UTF-8'); ?>" alt="Sampul saat ini" style="max-width: 150px; margin-bottom: 10px;">
+                            </div>
+                        <?php endif; ?>
+                        <input type="file" id="sampul" name="sampul">
+                        <input type="hidden" name="sampul_lama" value="<?php echo htmlspecialchars($buku['sampul'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <small class="form-hint">Format file: JPG, JPEG, PNG, GIF. Maksimal 2MB. Kosongkan jika tidak ingin mengubah sampul.</small>
                     </div>
                     
                     <div class="form-actions">

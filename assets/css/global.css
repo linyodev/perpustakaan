@@ -214,3 +214,31 @@ main.container {
     font-size: 1.2em;
     text-decoration: none;
 }
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status-dipinjam {
+    background: #fff3cd;
+    color: #856404 !important;
+}
+
+.status-dikembalikan {
+    background: #d4edda;
+    color: #155724 !important;
+}
+
+.status-menunggu-persetujuan {
+    background: #ffeeba;
+    color: #856404 !important;
+}
+
+.status-ditolak {
+    background: #f8d7da;
+    color: #721c24 !important;
+}
+

@@ -302,23 +302,6 @@ main {
     padding: 12px 30px;
 }
 
-.status-badge {
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.status-dipinjam {
-    background: #fff3cd;
-    color: #856404;
-}
-
-.status-dikembalikan {
-    background: #d4edda;
-    color: #155724;
-}
-
 .select-status {
     padding: 4px 8px;
     border: 1px solid #ddd;

@@ -9,24 +9,69 @@ require_once('../includes/db_config.php');
 if (isset($_POST['update_status'])) {
     $id_peminjaman = $_POST['id_peminjaman'];
     $status_baru = $_POST['status'];
-    
+    $conn = get_db_connection();
+
     try {
-        $conn = get_db_connection();
-        $stmt = $conn->prepare("UPDATE peminjaman SET status = :status WHERE id_peminjaman = :id");
-        $stmt->bindParam(':status', $status_baru, PDO::PARAM_STR);
+        $conn->beginTransaction();
+
+        $stmt = $conn->prepare("SELECT id_buku, status FROM peminjaman WHERE id_peminjaman = :id");
         $stmt->bindParam(':id', $id_peminjaman, PDO::PARAM_INT);
         $stmt->execute();
-        $_SESSION['success_message'] = "Status peminjaman berhasil diupdate";
+        $peminjaman = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($peminjaman) {
+            $id_buku = $peminjaman['id_buku'];
+            $status_lama = $peminjaman['status'];
+            $update_query = "UPDATE peminjaman SET status = :status";
+
+            if ($status_baru === 'dipinjam' && $status_lama === 'menunggu persetujuan') {
+                $loan_period = 7;
+                $tanggal_kembali = date('Y-m-d', strtotime("+$loan_period days"));
+                $update_query .= ", tanggal_kembali = :tanggal_kembali";
+
+                $stmt_buku = $conn->prepare("UPDATE buku SET jumlah = jumlah - 1 WHERE id_buku = :id_buku AND jumlah > 0");
+                $stmt_buku->bindParam(':id_buku', $id_buku, PDO::PARAM_INT);
+                $stmt_buku->execute();
+
+            } elseif ($status_baru === 'dikembalikan' && $status_lama === 'dipinjam') {
+                $tanggal_kembali = date('Y-m-d');
+                $update_query .= ", tanggal_kembali = :tanggal_kembali";
+                
+                $stmt_buku = $conn->prepare("UPDATE buku SET jumlah = jumlah + 1 WHERE id_buku = :id_buku");
+                $stmt_buku->bindParam(':id_buku', $id_buku, PDO::PARAM_INT);
+                $stmt_buku->execute();
+            }
+
+            $update_query .= " WHERE id_peminjaman = :id";
+            $stmt = $conn->prepare($update_query);
+            $stmt->bindParam(':status', $status_baru, PDO::PARAM_STR);
+            $stmt->bindParam(':id', $id_peminjaman, PDO::PARAM_INT);
+            if (($status_baru === 'dipinjam' && $status_lama === 'menunggu persetujuan') || ($status_baru === 'dikembalikan' && $status_lama === 'dipinjam')) {
+                $stmt->bindParam(':tanggal_kembali', $tanggal_kembali, PDO::PARAM_STR);
+            }
+            $stmt->execute();
+
+            $conn->commit();
+            $_SESSION['success_message'] = "Status peminjaman berhasil diupdate";
+        } else {
+            $_SESSION['error_message'] = "Peminjaman tidak ditemukan.";
+        }
+
     } catch(PDOException $e) {
-        $_SESSION['success_message'] = "Gagal mengupdate status";
+        if ($conn->inTransaction()) {
+            $conn->rollBack();
+        }
+        $_SESSION['error_message'] = "Gagal mengupdate status: " . $e->getMessage();
     }
+    header("Location: kelola_peminjaman.php");
+    exit();
 }
 try {
     $conn = get_db_connection();
     $query = "SELECT p.*, pm.nama, b.judul 
               FROM peminjaman p 
-              JOIN pemustaka pm ON p.id_pemustaka = pm.id_pemustaka 
-              JOIN buku b ON p.id_buku = b.id_buku 
+              LEFT JOIN pemustaka pm ON p.id_pemustaka = pm.id_pemustaka 
+              LEFT JOIN buku b ON p.id_buku = b.id_buku 
               ORDER BY p.id_peminjaman DESC";
     $stmt = $conn->query($query);
     $peminjaman_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -72,6 +117,14 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF
                         ?>
                     </div>
                 <?php endif; ?>
+                <?php if (isset($_SESSION['error_message'])): ?>
+                    <div class="error-message">
+                        <?php 
+                        echo htmlspecialchars($_SESSION['error_message'], ENT_QUOTES, 'UTF-8');
+                        unset($_SESSION['error_message']);
+                        ?>
+                    </div>
+                <?php endif; ?>
                 
                 <table class="data-table">
                     <thead>
@@ -94,17 +147,18 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF
                                     <td><?php echo htmlspecialchars($pinjam['judul'], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td><?php echo htmlspecialchars($pinjam['tanggal_pinjam'], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td><?php echo htmlspecialchars($pinjam['tanggal_kembali'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td>
-                                        <span class="status-badge status-<?php echo $pinjam['status']; ?>">
-                                            <?php echo htmlspecialchars($pinjam['status'], ENT_QUOTES, 'UTF-8'); ?>
-                                        </span>
-                                    </td>
-                                    <td>
+                                                                         <td>
+                                                                            <span class="status-badge status-<?php echo str_replace(' ', '-', $pinjam['status']); ?>">
+                                                                                <?php echo htmlspecialchars($pinjam['status'], ENT_QUOTES, 'UTF-8'); ?>
+                                                                            </span>
+                                                                        </td>                                    <td>
                                         <form action="kelola_peminjaman.php" method="POST" style="display: inline;">
                                             <input type="hidden" name="id_peminjaman" value="<?php echo $pinjam['id_peminjaman']; ?>">
                                             <select name="status" class="select-status">
-                                                <option value="dipinjam" <?php echo $pinjam['status'] == 'dipinjam' ? 'selected' : ''; ?>>Dipinjam</option>
+                                                <option value="menunggu persetujuan" <?php echo $pinjam['status'] == 'menunggu persetujuan' ? 'selected' : ''; ?>>Menunggu Persetujuan</option>
+                                                <option value="dipinjam" <?php echo $pinjam['status'] == 'dipinjam' ? 'selected' : ''; ?>>Disetujui (Dipinjam)</option>
                                                 <option value="dikembalikan" <?php echo $pinjam['status'] == 'dikembalikan' ? 'selected' : ''; ?>>Dikembalikan</option>
+                                                <option value="ditolak" <?php echo $pinjam['status'] == 'ditolak' ? 'selected' : ''; ?>>Ditolak</option>
                                             </select>
                                             <button type="submit" name="update_status" class="btn-small">Update</button>
                                         </form>
