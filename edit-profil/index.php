@@ -12,17 +12,17 @@ $success_message = '';
 $conn = get_db_connection();
 $user_id = $_SESSION['user_id'];
 
-// Proses form saat disubmit
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Ambil dan sanitasi input
+    
     $nama_lengkap = sanitizeInput($_POST['nama_lengkap']);
     $email = sanitizeInput($_POST['email']);
     $no_hp = sanitizeInput($_POST['no_hp']);
-    $alamat = sanitizeInput($_POST['alamat']); // New field
+    $alamat = sanitizeInput($_POST['alamat']); 
     $current_password = $_POST['current_password'];
     $new_password = $_POST['new_password'];
 
-    // Validasi input dasar
+    
     if (!validasiWajibDiisi($nama_lengkap)) $errors[] = "Nama lengkap wajib diisi.";
     if (!validasiNama($nama_lengkap)) $errors[] = "Nama lengkap hanya boleh berisi huruf dan spasi.";
 
@@ -36,14 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     elseif (!validasiAlamat($alamat)) $errors[] = "Alamat mengandung karakter yang tidak diizinkan.";
 
 
-    // Validasi Perubahan Password
     $update_password = false;
     if (validasiWajibDiisi($new_password)) {
         $update_password = true;
         if (!validasiWajibDiisi($current_password)) {
             $errors[] = "Password saat ini wajib diisi untuk mengubah password.";
         } else {
-            // Cek password saat ini
             $stmt = $conn->prepare("SELECT password FROM pemustaka WHERE id_pemustaka = :id");
             $stmt->bindParam(':id', $user_id, PDO::PARAM_INT);
             $stmt->execute();
@@ -59,10 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Jika tidak ada error, update database
     if (empty($errors)) {
         try {
-            // Bangun query UPDATE
             $sql = "UPDATE pemustaka SET nama = :nama, email = :email, no_hp = :no_hp, alamat = :alamat";
             if ($update_password) {
                 $sql .= ", password = :password";
@@ -73,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bindParam(':nama', $nama_lengkap, PDO::PARAM_STR);
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
             $stmt->bindParam(':no_hp', $no_hp, PDO::PARAM_STR);
-            $stmt->bindParam(':alamat', $alamat, PDO::PARAM_STR); // Bind new field
+            $stmt->bindParam(':alamat', $alamat, PDO::PARAM_STR); 
             $stmt->bindParam(':id', $user_id, PDO::PARAM_INT);
 
             if ($update_password) {
@@ -83,20 +79,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $stmt->execute();
 
-            // Update session
             $_SESSION['user_name'] = $nama_lengkap;
-            $_SESSION['user_email'] = $email; // Update email in session if it's user-facing
+            $_SESSION['user_email'] = $email; 
 
             $success_message = "Profil berhasil diperbarui!";
 
         } catch (PDOException $e) {
+            var_dump($e);
             $errors[] = "Gagal memperbarui profil. Terjadi kesalahan database.";
-            // error_log($e->getMessage()); // Uncomment for debugging
         }
     }
 }
 
-// Ambil data pengguna untuk ditampilkan di form
 try {
     $stmt = $conn->prepare("SELECT nama, email, alamat, no_hp, alamat FROM pemustaka WHERE id_pemustaka = :id");
     $stmt->bindParam(':id', $user_id, PDO::PARAM_INT);
