@@ -66,6 +66,5 @@ try {
     if ($conn->inTransaction()) {
         $conn->rollBack();
     }
-    var_dump($e);
-    // redirectToStatus('error', 'Kesalahan Database', 'Terjadi kesalahan saat memproses permintaan Anda. Silakan coba lagi nanti.');
+    redirectToStatus('error', 'Kesalahan Database', 'Terjadi kesalahan saat memproses permintaan Anda. Silakan coba lagi nanti.');
 }

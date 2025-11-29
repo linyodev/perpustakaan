@@ -8,7 +8,7 @@ $errors = $_SESSION['errors'] ?? [];
 $success_message = $_SESSION['success_message'] ?? '';
 $form_data = $_SESSION['form_data'] ?? [];
 
-// Clear session messages after displaying
+
 unset($_SESSION['errors']);
 unset($_SESSION['success_message']);
 unset($_SESSION['form_data']);

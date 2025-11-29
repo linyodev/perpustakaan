@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Basic authorization: check if either a user or an admin is logged in.
+
 if (!isset($_SESSION['user_login']) && !isset($_SESSION['admin_logged_in'])) {
     die("Akses ditolak. Silakan login terlebih dahulu.");
 }
@@ -33,7 +33,7 @@ try {
         die("Data peminjaman tidak ditemukan.");
     }
 
-    // Security check: If it's a regular user, ensure they can only see their own invoices.
+    
     if (isset($_SESSION['user_id']) && !isset($_SESSION['admin_logged_in'])) {
         $stmt_check = $conn->prepare("SELECT id_pemustaka FROM peminjaman WHERE id_peminjaman = :id");
         $stmt_check->bindParam(':id', $id_peminjaman, PDO::PARAM_INT);
