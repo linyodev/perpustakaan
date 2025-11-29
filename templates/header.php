@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (!isset($_SESSION)) {
+    session_start();
+}
 $is_admin = strpos($_SERVER['REQUEST_URI'], '/admin/') !== false;
 $is_logged_in = isset($_SESSION['user_login']) && $_SESSION['user_login'] === true;
 
