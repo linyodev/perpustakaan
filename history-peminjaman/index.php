@@ -1,6 +1,4 @@
 <?php
-session_start();
-require_once '../includes/authorization.php';
 require_once '../includes/db_config.php';
 
 $pageTitle = "History Peminjaman";
