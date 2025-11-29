@@ -26,6 +26,7 @@ include('../templates/header.php');
         </div>
         <button type="submit" class="btn">Login</button>
         <p class="form-link">Belum punya akun? <a href="/perpustakaan/register/">Register di sini</a></p>
+        <p class="form-link">Login sebagai Admin? <a href="/perpustakaan/admin/login.php">Login Admin</a></p>
     </form>
 </div>
 
