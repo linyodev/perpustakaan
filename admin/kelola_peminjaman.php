@@ -143,10 +143,10 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF
                             <?php foreach($peminjaman_list as $pinjam): ?>
                                 <tr>
                                     <td><?php echo htmlspecialchars($pinjam['id_peminjaman'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td><?php echo htmlspecialchars($pinjam['nama'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td><?php echo htmlspecialchars($pinjam['judul'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td><?php echo htmlspecialchars($pinjam['tanggal_pinjam'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td><?php echo htmlspecialchars($pinjam['tanggal_kembali'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo htmlspecialchars($pinjam['nama'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo htmlspecialchars($pinjam['judul'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo htmlspecialchars($pinjam['tanggal_pinjam'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo htmlspecialchars($pinjam['tanggal_kembali'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                                                                          <td>
                                                                             <span class="status-badge status-<?php echo str_replace(' ', '-', $pinjam['status']); ?>">
                                                                                 <?php echo htmlspecialchars($pinjam['status'], ENT_QUOTES, 'UTF-8'); ?>

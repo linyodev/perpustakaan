@@ -38,7 +38,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php if ($stmt->rowCount() > 0): ?>
             <?php foreach($result as $row): ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($row['judul']); ?></td>
+                    <td><?php echo htmlspecialchars($row['judul'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                     <td><?php echo date('d F Y', strtotime($row['tanggal_pinjam'])); ?></td>
                     <td><?php echo $row['tanggal_kembali'] ? date('d F Y', strtotime($row['tanggal_kembali'])) : 'Belum dikembalikan'; ?></td>
                     <td>

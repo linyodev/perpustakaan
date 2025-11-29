@@ -198,25 +198,25 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF
                     
                     <div class="form-group">
                         <label for="penulis">Penulis: <span class="required">*</span></label>
-                        <input type="text" id="penulis" name="penulis" value="<?php echo htmlspecialchars($buku['penulis'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="text" id="penulis" name="penulis" value="<?php echo htmlspecialchars($buku['penulis'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                         <small class="form-hint">Maksimal 150 karakter, hanya huruf dan spasi</small>
                     </div>
                     
                     <div class="form-group">
                         <label for="penerbit">Penerbit:</label>
-                        <input type="text" id="penerbit" name="penerbit" value="<?php echo htmlspecialchars($buku['penerbit'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="text" id="penerbit" name="penerbit" value="<?php echo htmlspecialchars($buku['penerbit'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                         <small class="form-hint">Maksimal 150 karakter</small>
                     </div>
                     
                     <div class="form-group">
                         <label for="tahun">Tahun Terbit: <span class="required">*</span></label>
-                        <input type="text" id="tahun" name="tahun" value="<?php echo htmlspecialchars($buku['tahun'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="text" id="tahun" name="tahun" value="<?php echo htmlspecialchars($buku['tahun'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                         <small class="form-hint">Harus 4 digit angka (contoh: 2024)</small>
                     </div>
                     
                     <div class="form-group">
                         <label for="kategori">Kategori:</label>
-                        <input type="text" id="kategori" name="kategori" value="<?php echo htmlspecialchars($buku['kategori'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="text" id="kategori" name="kategori" value="<?php echo htmlspecialchars($buku['kategori'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                         <small class="form-hint">Maksimal 100 karakter</small>
                     </div>
                     
@@ -234,7 +234,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF
                             </div>
                         <?php endif; ?>
                         <input type="file" id="sampul" name="sampul">
-                        <input type="hidden" name="sampul_lama" value="<?php echo htmlspecialchars($buku['sampul'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="sampul_lama" value="<?php echo htmlspecialchars($buku['sampul'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                         <small class="form-hint">Format file: JPG, JPEG, PNG, GIF. Maksimal 2MB. Kosongkan jika tidak ingin mengubah sampul.</small>
                     </div>
                     
