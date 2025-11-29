@@ -53,6 +53,7 @@ if (!$is_admin && !$is_logged_in) {
                             </li>
                         <?php else: ?>
                             <li><a href="/perpustakaan/login/">Login</a></li>
+                            <li><a href="/perpustakaan/admin/login.php">Login Admin</a></li>
                             <li><a href="/perpustakaan/register/">Register</a></li>
                         <?php endif; ?>
                     </ul>
