@@ -263,8 +263,11 @@ main {
 .data-table td {
     padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
     vertical-align: middle;
+}
+
+.data-table tbody tr {
+    border-bottom: 1px solid #ddd;
 }
 
 .data-table tbody tr:hover {
