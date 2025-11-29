@@ -1,8 +1,8 @@
 <?php
-define('DB_HOST', 'localhost');
+define('DB_HOST', $_ENV['APP_DB_HOST'] ?? 'localhost');
 define('DB_NAME', 'library');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_USER', $_ENV['APP_DB_USER'] ?? 'root');
+define('DB_PASS', $_ENV['APP_DB_PASSWORD'] ?? '');
 
 function get_db_connection() {
     try {
