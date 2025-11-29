@@ -89,7 +89,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF
                                     <td><?php echo htmlspecialchars($buku['tahun'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td><?php echo htmlspecialchars($buku['kategori'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td><?php echo htmlspecialchars($buku['jumlah'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td class="action-cell">
+                                    <td>
                                         <a href="edit_buku.php?id=<?php echo $buku['id_buku']; ?>" class="btn-edit">Edit</a>
                                         <a href="hapus_buku.php?id=<?php echo $buku['id_buku']; ?>" class="btn-delete" onclick="return confirm('Yakin ingin menghapus buku ini?')">Hapus</a>
                                     </td>
