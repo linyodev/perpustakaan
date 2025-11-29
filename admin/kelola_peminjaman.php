@@ -152,7 +152,7 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF
                                                                                 <?php echo htmlspecialchars($pinjam['status'], ENT_QUOTES, 'UTF-8'); ?>
                                                                             </span>
                                                                         </td>                                    <td>
-                                        <form action="kelola_peminjaman.php" method="POST" style="display: inline;">
+                                        <form action="kelola_peminjaman.php" method="POST" style="display: inline-block; margin-bottom: 5px;">
                                             <input type="hidden" name="id_peminjaman" value="<?php echo $pinjam['id_peminjaman']; ?>">
                                             <select name="status" class="select-status">
                                                 <option value="menunggu persetujuan" <?php echo $pinjam['status'] == 'menunggu persetujuan' ? 'selected' : ''; ?>>Menunggu Persetujuan</option>
@@ -162,6 +162,9 @@ $admin_username = htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF
                                             </select>
                                             <button type="submit" name="update_status" class="btn-small">Update</button>
                                         </form>
+                                        <?php if ($pinjam['status'] == 'dikembalikan'): ?>
+                                            <a href="../invoice/cetak_invoice.php?id=<?php echo $pinjam['id_peminjaman']; ?>" target="_blank" class="btn-small" style="background: #17a2b8;">Cetak Invoice</a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

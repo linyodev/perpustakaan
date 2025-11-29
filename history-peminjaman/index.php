@@ -9,7 +9,7 @@ $conn = get_db_connection();
 $id_pemustaka = $_SESSION['user_id'];
 
 
-$sql = "SELECT b.judul, p.tanggal_pinjam, p.tanggal_kembali , p.status as status
+$sql = "SELECT p.id_peminjaman, b.judul, p.tanggal_pinjam, p.tanggal_kembali, p.status 
         FROM peminjaman p 
         JOIN buku b ON p.id_buku = b.id_buku 
         WHERE p.id_pemustaka = :id
@@ -31,6 +31,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <th>Tanggal Pinjam</th>
             <th>Tanggal Kembali</th>
             <th>Status</th>
+            <th>Aksi</th>
         </tr>
     </thead>
     <tbody>
@@ -45,11 +46,16 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php echo htmlspecialchars($row['status']); ?>
                         </span>
                     </td>
+                    <td>
+                        <?php if ($row['status'] == 'dikembalikan'): ?>
+                            <a href="../invoice/cetak_invoice.php?id=<?php echo $row['id_peminjaman']; ?>" target="_blank" class="btn" style="background: #17a2b8; padding: 6px 12px; font-size: 12px;">Cetak Invoice</a>
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
             <tr>
-                <td colspan="4" style="text-align: center;">Anda belum memiliki riwayat peminjaman.</td>
+                <td colspan="5" style="text-align: center;">Anda belum memiliki riwayat peminjaman.</td>
             </tr>
         <?php endif; ?>
     </tbody>
