@@ -1,19 +1,44 @@
 <?php
-session_start();
 
+/*
+|--------------------------------------------------------------------------
+| Halaman Manajemen Peminjaman
+|--------------------------------------------------------------------------
+|
+| Ini adalah halaman kompleks yang menangani dua hal:
+| 1. Menampilkan semua data peminjaman buku dalam sebuah tabel.
+| 2. Memproses perubahan status peminjaman yang dilakukan oleh admin.
+|    Misalnya, mengubah status dari 'menunggu' menjadi 'dipinjam'.
+|
+| Perubahan status ini juga secara otomatis akan memperbarui
+| jumlah stok buku yang tersedia.
+|
+*/
+
+// Mulai session dan otorisasi admin.
+session_start();
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header("Location: login.php");
     exit();
 }
+
+// Panggil file konfigurasi database.
 require_once('../includes/db_config.php');
+
+// --- LOGIKA PEMROSESAN FORM (METHOD POST) ---
+// Cek apakah ada form yang disubmit untuk mengupdate status.
 if (isset($_POST['update_status'])) {
     $id_peminjaman = $_POST['id_peminjaman'];
     $status_baru = $_POST['status'];
     $conn = get_db_connection();
 
     try {
+        // Gunakan transaksi database. Ini sangat penting. Jika salah satu query
+        // gagal (misal: gagal update stok), semua perubahan akan dibatalkan (rollback).
+        // Ini menjaga data tetap konsisten.
         $conn->beginTransaction();
 
+        // Ambil dulu status peminjaman saat ini dari database.
         $stmt = $conn->prepare("SELECT id_buku, status FROM peminjaman WHERE id_peminjaman = :id");
         $stmt->bindParam(':id', $id_peminjaman, PDO::PARAM_INT);
         $stmt->execute();
@@ -22,161 +47,155 @@ if (isset($_POST['update_status'])) {
         if ($peminjaman) {
             $id_buku = $peminjaman['id_buku'];
             $status_lama = $peminjaman['status'];
-            $update_query = "UPDATE peminjaman SET status = :status";
 
-            if ($status_baru === 'dipinjam' && $status_lama === 'menunggu persetujuan') {
-                $loan_period = 7;
-                $tanggal_kembali = date('Y-m-d', strtotime("+$loan_period days"));
-                $update_query .= ", tanggal_kembali = :tanggal_kembali";
-
-                $stmt_buku = $conn->prepare("UPDATE buku SET jumlah = jumlah - 1 WHERE id_buku = :id_buku AND jumlah > 0");
-                $stmt_buku->bindParam(':id_buku', $id_buku, PDO::PARAM_INT);
-                $stmt_buku->execute();
-
-            } elseif ($status_baru === 'dikembalikan' && $status_lama === 'dipinjam') {
-                $tanggal_kembali = date('Y-m-d');
-                $update_query .= ", tanggal_kembali = :tanggal_kembali";
+            // Hanya proses jika statusnya benar-benar berubah.
+            if ($status_lama !== $status_baru) {
+                // --- Logika Penyesuaian Stok Buku ---
                 
-                $stmt_buku = $conn->prepare("UPDATE buku SET jumlah = jumlah + 1 WHERE id_buku = :id_buku");
-                $stmt_buku->bindParam(':id_buku', $id_buku, PDO::PARAM_INT);
-                $stmt_buku->execute();
-            }
+                // Jika status diubah dari 'menunggu' menjadi 'dipinjam', maka stok buku berkurang 1.
+                if ($status_lama == 'menunggu persetujuan' && $status_baru == 'dipinjam') {
+                    $stmt_buku = $conn->prepare("UPDATE buku SET jumlah = jumlah - 1 WHERE id_buku = :id_buku AND jumlah > 0");
+                    $stmt_buku->execute([':id_buku' => $id_buku]);
+                }
+                // Jika status diubah dari 'dipinjam' menjadi 'dikembalikan', maka stok buku bertambah 1.
+                elseif ($status_lama == 'dipinjam' && $status_baru == 'dikembalikan') {
+                    $stmt_buku = $conn->prepare("UPDATE buku SET jumlah = jumlah + 1 WHERE id_buku = :id_buku");
+                    $stmt_buku->execute([':id_buku' => $id_buku]);
+                }
+                // Jika admin salah klik, misal dari 'dipinjam' diubah kembali jadi 'menunggu',
+                // maka stok harus dikembalikan (bertambah 1).
+                elseif ($status_lama == 'dipinjam' && ($status_baru == 'menunggu persetujuan' || $status_baru == 'ditolak')) {
+                     $stmt_buku = $conn->prepare("UPDATE buku SET jumlah = jumlah + 1 WHERE id_buku = :id_buku");
+                    $stmt_buku->execute([':id_buku' => $id_buku]);
+                }
 
-            $update_query .= " WHERE id_peminjaman = :id";
-            $stmt = $conn->prepare($update_query);
-            $stmt->bindParam(':status', $status_baru, PDO::PARAM_STR);
-            $stmt->bindParam(':id', $id_peminjaman, PDO::PARAM_INT);
-            if (($status_baru === 'dipinjam' && $status_lama === 'menunggu persetujuan') || ($status_baru === 'dikembalikan' && $status_lama === 'dipinjam')) {
-                $stmt->bindParam(':tanggal_kembali', $tanggal_kembali, PDO::PARAM_STR);
+                // Setelah stok disesuaikan, update status peminjaman itu sendiri.
+                $stmt_update = $conn->prepare("UPDATE peminjaman SET status = :status WHERE id_peminjaman = :id");
+                $stmt_update->execute([':status' => $status_baru, ':id' => $id_peminjaman]);
+                
+                $_SESSION['success_message'] = "Status peminjaman untuk ID #$id_peminjaman berhasil diubah.";
             }
-            $stmt->execute();
-
-            $conn->commit();
-            $_SESSION['success_message'] = "Status peminjaman berhasil diupdate";
         } else {
             $_SESSION['error_message'] = "Peminjaman tidak ditemukan.";
         }
 
+        // Jika semua query di atas berhasil, simpan perubahan secara permanen.
+        $conn->commit();
+
     } catch(PDOException $e) {
+        // Jika ada satu saja query yang gagal, batalkan semua perubahan.
         if ($conn->inTransaction()) {
             $conn->rollBack();
         }
         $_SESSION['error_message'] = "Gagal mengupdate status: " . $e->getMessage();
+        error_log("Gagal update peminjaman: " . $e->getMessage());
     }
+    
+    // Arahkan kembali ke halaman ini untuk mencegah form disubmit ulang jika di-refresh.
     header("Location: kelola_peminjaman.php");
     exit();
 }
+
+// --- LOGIKA PENGAMBILAN DATA (METHOD GET) ---
+// Bagian ini dieksekusi saat halaman dimuat pertama kali.
+$peminjaman_list = [];
+$error = null;
 try {
     $conn = get_db_connection();
-    $query = "SELECT p.*, pm.nama, b.judul 
+    // Query ini mengambil semua data peminjaman dan menggabungkannya (JOIN) dengan
+    // tabel pemustaka (untuk dapat nama) dan tabel buku (untuk dapat judul).
+    $query = "SELECT p.id_peminjaman, p.tanggal_pinjam, p.tanggal_kembali, p.status, 
+                     pm.nama AS nama_pemustaka, b.judul AS judul_buku
               FROM peminjaman p 
-              LEFT JOIN pemustaka pm ON p.id_pemustaka = pm.id_pemustaka 
-              LEFT JOIN buku b ON p.id_buku = b.id_buku 
-              ORDER BY p.id_peminjaman DESC";
+              JOIN pemustaka pm ON p.id_pemustaka = pm.id_pemustaka 
+              JOIN buku b ON p.id_buku = b.id_buku 
+              ORDER BY p.tanggal_pinjam DESC, p.id_peminjaman DESC";
     $stmt = $conn->query($query);
     $peminjaman_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch(PDOException $e) {
-    $error = "Gagal mengambil data peminjaman";
+    $error = "Gagal mengambil data peminjaman: " . $e->getMessage();
+    error_log($error);
 }
-$admin_username = htmlspecialchars($_SESSION['admin_username'], ENT_QUOTES, 'UTF-8');
+
+// Siapkan variabel untuk template header.
+$pageTitle = "Kelola Peminjaman";
+$cssFile = "/perpustakaan/assets/css/admin_manajemen_pinjaman.css";
+
+// Panggil template header.
+include('../templates/header.php');
 ?>
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Peminjaman</title>
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
-    <div class="dashboard-container">
-        <header>
-            <h1>Kelola Peminjaman</h1>
-            <div class="admin-info">
-                <span><?php echo $admin_username; ?></span>
-                <a href="logout.php" class="btn-logout">Logout</a>
-            </div>
-        </header>
-        
-        <nav class="admin-menu">
-            <ul>
-                <li><a href="kelola_buku.php">Kelola Buku</a></li>
-                <li><a href="lihat_pemustaka.php">Lihat Pemustaka</a></li>
-                <li><a href="kelola_peminjaman.php" class="active">Kelola Peminjaman</a></li>
-            </ul>
-        </nav>
-        
-        <main>
-            <div class="content-area">
-                <?php if (isset($_SESSION['success_message'])): ?>
-                    <div class="success-message">
-                        <?php 
-                        echo htmlspecialchars($_SESSION['success_message'], ENT_QUOTES, 'UTF-8');
-                        unset($_SESSION['success_message']);
-                        ?>
-                    </div>
-                <?php endif; ?>
-                <?php if (isset($_SESSION['error_message'])): ?>
-                    <div class="error-message">
-                        <?php 
-                        echo htmlspecialchars($_SESSION['error_message'], ENT_QUOTES, 'UTF-8');
-                        unset($_SESSION['error_message']);
-                        ?>
-                    </div>
-                <?php endif; ?>
-                
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Pemustaka</th>
-                            <th>Judul Buku</th>
-                            <th>Tgl Pinjam</th>
-                            <th>Tgl Kembali</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($peminjaman_list)): ?>
-                            <?php foreach($peminjaman_list as $pinjam): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($pinjam['id_peminjaman'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td><?php echo htmlspecialchars($pinjam['nama'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td><?php echo htmlspecialchars($pinjam['judul'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td><?php echo htmlspecialchars($pinjam['tanggal_pinjam'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td><?php echo htmlspecialchars($pinjam['tanggal_kembali'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
-                                                                         <td>
-                                                                            <span class="status-badge status-<?php echo str_replace(' ', '-', $pinjam['status']); ?>">
-                                                                                <?php echo htmlspecialchars($pinjam['status'], ENT_QUOTES, 'UTF-8'); ?>
-                                                                            </span>
-                                                                        </td>                                    <td>
-                                        <form action="kelola_peminjaman.php" method="POST" style="display: inline-block; margin-bottom: 5px;">
-                                            <input type="hidden" name="id_peminjaman" value="<?php echo $pinjam['id_peminjaman']; ?>">
-                                            <select name="status" class="select-status">
-                                                <option value="menunggu persetujuan" <?php echo $pinjam['status'] == 'menunggu persetujuan' ? 'selected' : ''; ?>>Menunggu Persetujuan</option>
-                                                <option value="dipinjam" <?php echo $pinjam['status'] == 'dipinjam' ? 'selected' : ''; ?>>Disetujui (Dipinjam)</option>
-                                                <option value="dikembalikan" <?php echo $pinjam['status'] == 'dikembalikan' ? 'selected' : ''; ?>>Dikembalikan</option>
-                                                <option value="ditolak" <?php echo $pinjam['status'] == 'ditolak' ? 'selected' : ''; ?>>Ditolak</option>
-                                            </select>
-                                            <button type="submit" name="update_status" class="btn-small">Update</button>
-                                        </form>
-                                        <?php if ($pinjam['status'] == 'dikembalikan'): ?>
-                                            <a href="../invoice/cetak_invoice.php?id=<?php echo $pinjam['id_peminjaman']; ?>" target="_blank" class="btn-small" style="background: #17a2b8;">Cetak Invoice</a>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="7" class="text-center">Belum ada data peminjaman</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-        </main>
-    </div>
-</body>
-</html>
+<!-- Area konten utama untuk manajemen peminjaman. -->
+<div class="content-area">
+    <h2 class="page-title">Manajemen Peminjaman</h2>
+
+    <!-- Tampilkan pesan sukses atau error dari session. -->
+    <?php if (isset($_SESSION['success_message'])): ?>
+        <div class="alert alert-success"><?php echo htmlspecialchars($_SESSION['success_message']); unset($_SESSION['success_message']); ?></div>
+    <?php endif; ?>
+    <?php if (isset($_SESSION['error_message'])): ?>
+        <div class="alert alert-danger"><?php echo htmlspecialchars($_SESSION['error_message']); unset($_SESSION['error_message']); ?></div>
+    <?php endif; ?>
+    <?php if ($error): ?>
+        <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+    <?php endif; ?>
+    
+    <!-- Tabel data peminjaman. -->
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Pemustaka</th>
+                <th>Judul Buku</th>
+                <th>Tgl. Pinjam</th>
+                <th>Tgl. Kembali</th>
+                <th>Status</th>
+                <th width="25%">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($peminjaman_list)): ?>
+                <?php foreach($peminjaman_list as $pinjam): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($pinjam['id_peminjaman']); ?></td>
+                        <td><?php echo htmlspecialchars($pinjam['nama_pemustaka'] ?? 'N/A'); ?></td>
+                        <td><?php echo htmlspecialchars($pinjam['judul_buku'] ?? 'N/A'); ?></td>
+                        <td><?php echo htmlspecialchars(date("d-m-Y", strtotime($pinjam['tanggal_pinjam']))); ?></td>
+                        <td><?php echo $pinjam['tanggal_kembali'] ? htmlspecialchars(date("d-m-Y", strtotime($pinjam['tanggal_kembali']))) : '-'; ?></td>
+                        <td>
+                            <span class="status-badge status-<?php echo str_replace(' ', '-', strtolower($pinjam['status'])); ?>">
+                                <?php echo htmlspecialchars($pinjam['status']); ?>
+                            </span>
+                        </td>
+                        <td class="action-cell">
+                            <!-- Mini-form di setiap baris untuk update status. -->
+                            <form action="kelola_peminjaman.php" method="POST" class="form-status-update">
+                                <input type="hidden" name="id_peminjaman" value="<?php echo $pinjam['id_peminjaman']; ?>">
+                                <select name="status" class="select-status">
+                                    <option value="menunggu persetujuan" <?php if($pinjam['status'] == 'menunggu persetujuan') echo 'selected'; ?>>Menunggu</option>
+                                    <option value="dipinjam" <?php if($pinjam['status'] == 'dipinjam') echo 'selected'; ?>>Dipinjam</option>
+                                    <option value="dikembalikan" <?php if($pinjam['status'] == 'dikembalikan') echo 'selected'; ?>>Dikembalikan</option>
+                                    <option value="ditolak" <?php if($pinjam['status'] == 'ditolak') echo 'selected'; ?>>Ditolak</option>
+                                </select>
+                                <button type="submit" name="update_status" class="btn btn-small">Update</button>
+                            </form>
+                            <!-- Tombol cetak invoice hanya muncul jika statusnya sudah 'dikembalikan'. -->
+                            <?php if ($pinjam['status'] == 'dikembalikan'): ?>
+                                <a href="../invoice/cetak_invoice.php?id=<?php echo $pinjam['id_peminjaman']; ?>" target="_blank" class="btn btn-small btn-invoice">Cetak Invoice</a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7" style="text-align: center;">Belum ada data peminjaman.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+
+<?php 
+// Panggil template footer.
+include('../templates/footer.php'); 
+?>

@@ -1,33 +1,77 @@
 <?php
+
+/*
+|--------------------------------------------------------------------------
+| Halaman Login Pengguna
+|--------------------------------------------------------------------------
+|
+| Halaman ini menampilkan formulir untuk pengguna (pemustaka) agar
+| bisa masuk ke dalam sistem. Halaman ini juga akan menampilkan pesan
+| jika terjadi kesalahan login (misal: password salah) atau pesan sukses
+| setelah pengguna berhasil mendaftar.
+|
+*/
+
+// Mulai session agar bisa menerima atau menampilkan pesan.
 if (!isset($_SESSION)) {
     session_start();
 }
+
+// Siapkan variabel untuk template header.
 $pageTitle = "Login";
 $cssFile = "/perpustakaan/assets/css/login.css";
+
+// Panggil template header.
 include('../templates/header.php');
 ?>
 
+<!-- Kontainer utama untuk formulir login. -->
 <div class="form-container">
-      <?php
-        if (isset($_SESSION['login_error'])) {
-            echo '<div class="error-message">' . htmlspecialchars($_SESSION['login_error'], ENT_QUOTES, 'UTF-8') . '</div>';
-            unset($_SESSION['login_error']);
-        }
-        ?>
     <h2 class="page-title">Login Pemustaka</h2>
+
+    <?php
+    // --- Tampilkan Pesan Feedback dari Session ---
+
+    // Cek apakah ada pesan error dari proses login sebelumnya.
+    if (isset($_SESSION['login_error'])) {
+        // Tampilkan pesan error di dalam kotak peringatan.
+        echo '<div class="alert alert-danger">' . htmlspecialchars($_SESSION['login_error']) . '</div>';
+        
+        // Hapus pesan dari session agar tidak muncul lagi saat halaman di-refresh.
+        unset($_SESSION['login_error']);
+    }
+    
+    // Cek apakah ada pesan sukses (biasanya dari halaman registrasi).
+    if (isset($_SESSION['success_message'])) {
+        // Tampilkan pesan sukses.
+        echo '<div class="alert alert-success">' . htmlspecialchars($_SESSION['success_message']) . '</div>';
+        // Hapus juga pesan ini setelah ditampilkan.
+        unset($_SESSION['success_message']);
+    }
+    ?>
+
+    <!-- Formulir Login -->
+    <!-- Data akan dikirim ke 'process.php' dengan metode POST. -->
     <form action="process.php" method="POST">
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="text" id="email" name="email" >
+            <input type="email" id="email" name="email" required>
         </div>
+        
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" >
+            <input type="password" id="password" name="password" required>
         </div>
+        
         <button type="submit" class="btn">Login</button>
+        
+        <!-- Link bantuan untuk pengguna -->
         <p class="form-link">Belum punya akun? <a href="/perpustakaan/register/">Register di sini</a></p>
-        <p class="form-link">Login sebagai Admin? <a href="/perpustakaan/admin/login.php">Login Admin</a></p>
+        <p class="form-link">Masuk sebagai Admin? <a href="/perpustakaan/admin/login.php">Login Admin</a></p>
     </form>
 </div>
 
-<?php include('../templates/footer.php'); ?>
+<?php 
+// Panggil template footer.
+include('../templates/footer.php'); 
+?>

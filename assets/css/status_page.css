@@ -1,32 +1,46 @@
+/**
+ * @file
+ * Stylesheet untuk halaman status generik.
+ *
+ * Catatan: Halaman ini kemungkinan besar sudah usang (obsolete) karena
+ * alur kerja peminjaman buku telah diubah untuk menampilkan pesan
+ * langsung di halaman koleksi buku.
+ */
+
 .status-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 60vh;
+    /* Mengisi sisa tinggi viewport di dalam <main> */
+    min-height: 50vh; 
     text-align: center;
 }
 
 .status-box {
-    width: 90%;
-    max-width: 500px;
+    width: 100%;
+    max-width: 550px;
     padding: 40px;
     border-radius: 8px;
     background-color: #fff;
-    border-left: 5px solid #ccc;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    /* Border tebal di kiri sebagai indikator visual */
+    border-left: 6px solid #ccc;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
 }
 
+/* Style untuk kotak status sukses */
 .status-box.success {
-    border-left-color: #28a745;
+    border-left-color: #28a745; /* Hijau */
 }
 
+/* Style untuk kotak status error */
 .status-box.error {
-    border-left-color: #dc3545;
+    border-left-color: #dc3545; /* Merah */
 }
 
 .status-box h2 {
     margin-top: 0;
     font-size: 2em;
+    font-weight: 600;
 }
 
 .status-box.success h2 {
@@ -44,13 +58,20 @@
     margin-bottom: 30px;
 }
 
+/* Tombol di dalam kotak status */
 .status-box .btn {
     text-decoration: none;
     padding: 12px 30px;
-    border-radius: 5px;
+    border-radius: 25px; /* Tombol berbentuk pil */
     color: white;
     font-weight: bold;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    display: inline-block;
+}
+
+.status-box .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 .status-box.success .btn {

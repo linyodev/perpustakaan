@@ -1,15 +1,88 @@
-.btn-aksi {
-    padding: 5px 10px;
+/*
+|--------------------------------------------------------------------------
+| Stylesheet untuk Halaman Manajemen Buku (Admin)
+|--------------------------------------------------------------------------
+|
+| File ini berisi style khusus yang hanya berlaku untuk halaman
+| manajemen buku di area admin, seperti tabel buku, tombol-tombol
+| aksi, dan formulir tambah/edit buku.
+|
+*/
+
+/* --- Tombol Aksi (Edit, Hapus) di dalam Tabel --- */
+.action-links a {
+    padding: 6px 12px;
     text-decoration: none;
     border-radius: 4px;
     color: white;
-    margin-right: 5px;
+    margin: 0 4px;
     font-size: 0.9em;
+    display: inline-block;
 }
 
-.btn-aksi.edit {
-    background-color: #17a2b8;
+.btn-edit {
+    background-color: #17a2b8; /* Warna biru-cyan untuk 'info' atau 'edit' */
 }
-.btn-aksi.hapus {
-    background-color: #dc3545;
+.btn-edit:hover {
+    background-color: #138496;
+}
+
+.btn-delete {
+    background-color: #dc3545; /* Warna merah untuk 'bahaya' atau 'hapus' */
+}
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+/* --- Gambar Sampul di dalam Tabel --- */
+.book-cover {
+    width: 50px;
+    height: 70px;
+    object-fit: cover; /* Memastikan gambar tidak penyok */
+    border-radius: 4px;
+}
+
+/* --- Bar Aksi (untuk tombol 'Tambah Buku Baru') --- */
+.action-bar {
+    margin-bottom: 20px;
+    text-align: right; /* Meletakkan tombol di sebelah kanan */
+}
+
+/* --- Kontainer Formulir Tambah/Edit Buku --- */
+.form-container-buku {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Tanda bintang merah untuk field yang wajib diisi */
+.data-form .required {
+    color: #dc3545;
+}
+
+/* Petunjuk kecil di bawah input field */
+.data-form .form-hint {
+    font-size: 0.85em;
+    color: #6c757d;
+    display: block;
+    margin-top: 4px;
+}
+
+/* Penataan untuk tombol di bagian bawah form (Simpan, Batal) */
+.form-actions {
+    margin-top: 25px;
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end; /* Mendorong tombol ke kanan */
+}
+
+/* Tombol sekunder (misalnya tombol 'Batal') */
+.btn-secondary {
+    background-color: #6c757d;
+}
+.btn-secondary:hover {
+    background-color: #5a6268;
 }

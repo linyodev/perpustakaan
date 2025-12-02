@@ -1,27 +1,53 @@
+/**
+ * @file
+ * Stylesheet untuk halaman login dan registrasi.
+ */
+
+/* Menggunakan .form-container dari global.css sebagai dasar */
+
+/* Link di bawah form (misal: "Belum punya akun?") */
 .form-container .form-link {
-    margin-top: 15px;
+    margin-top: 20px;
     text-align: center;
     font-size: 0.9em;
+    color: #666;
 }
 
 .form-container .form-link a {
     color: #007bff;
     text-decoration: none;
+    font-weight: 500;
 }
 
 .form-container .form-link a:hover {
     text-decoration: underline;
 }
 
+/* 
+   == Pesan Error/Sukses ==
+   Pesan ini sekarang menggunakan class .alert dari global.css,
+   sehingga style di bawah ini tidak lagi menjadi prioritas.
+   Dibiarkan sebagai fallback atau untuk referensi.
+*/
 .error-message {
-    background: #fee;
-    color: #c33;
+    background: #f8d7da;
+    color: #721c24;
     padding: 12px;
     border-radius: 5px;
     margin-bottom: 20px;
-    border: 1px solid #fcc;
+    border: 1px solid #f5c6cb;
+}
+
+.success-message {
+    background: #d4edda;
+    color: #155724;
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #c3e6cb;
 }
 
 .error-message ul {
-    margin-left: 20px;
+    margin: 0;
+    padding-left: 20px;
 }

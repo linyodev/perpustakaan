@@ -1,28 +1,53 @@
-.status-badge {
-    padding: 5px 10px;
-    border-radius: 12px;
-    color: #fff;
-    font-size: 0.85em;
-    font-weight: bold;
+/**
+ * @file
+ * Stylesheet khusus untuk halaman manajemen peminjaman di area admin.
+ */
+
+/* == Tombol dan Form di dalam Sel Aksi Tabel == */
+.action-cell {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
 }
 
-.status-badge.dipinjam {
-    background-color: #007bff;
+.form-status-update {
+    display: flex;
+    gap: 5px;
+    align-items: center;
 }
 
-.status-badge.terlambat {
-    background-color: #dc3545;
-}
-
-.status-badge.sudah-kembali {
-    background-color: #28a745;
-}
-
-.btn-aksi.kembali {
-    background-color: #28a745;
-    padding: 5px 10px;
-    text-decoration: none;
+.select-status {
+    padding: 6px;
     border-radius: 4px;
-    color: white;
+    border: 1px solid #ccc;
+    font-family: inherit;
     font-size: 0.9em;
 }
+
+.btn.btn-small {
+    padding: 6px 10px;
+    font-size: 0.9em;
+}
+
+.btn-invoice {
+    background-color: #17a2b8; /* Info */
+}
+.btn-invoice:hover {
+    background-color: #138496;
+}
+
+/* 
+   == Badge Status ==
+   Style untuk badge status peminjaman.
+   Class ini sudah didefinisikan di global.css, 
+   jadi idealnya file ini tidak perlu ada atau
+   style global tersebut dipindahkan ke sini jika hanya digunakan di sini.
+   Untuk saat ini, dibiarkan sebagai referensi.
+*/
+
+/* .status-badge { ... } */
+/* .status-menunggu-persetujuan { ... } */
+/* .status-dipinjam { ... } */
+/* .status-dikembalikan { ... } */
+/* .status-ditolak { ... } */

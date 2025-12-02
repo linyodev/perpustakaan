@@ -1,11 +1,29 @@
-.form-container small {
-    display: block;
-    margin-top: 5px;
-    color: #666;
+/**
+ * @file
+ * Stylesheet khusus untuk halaman edit profil pengguna.
+ */
+
+/* Kontainer utama untuk form edit profil */
+.form-container {
+    max-width: 600px; /* Sedikit lebih lebar untuk form profil */
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
 }
 
+/* Garis pemisah antara bagian profil dan bagian ubah password */
 .form-container hr {
-    margin: 20px 0;
+    margin: 25px 0;
     border: 0;
     border-top: 1px solid #eee;
+}
+
+/* Judul untuk setiap bagian form */
+.section-title {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.1em;
 }

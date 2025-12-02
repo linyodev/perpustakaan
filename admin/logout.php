@@ -1,16 +1,27 @@
 <?php
+/**
+ * @file
+ * Menangani proses logout khusus untuk administrator.
+ *
+ * Skrip ini akan menghancurkan semua data session dan
+ * mengalihkan admin kembali ke halaman login admin.
+ *
+ * Catatan: Logika logout ini disederhanakan dari versi sebelumnya
+ * untuk kejelasan dan konsistensi dengan logout pengguna utama.
+ * Menghapus cookie secara manual dan memulai ulang session
+ * untuk pesan logout tidak diperlukan.
+ */
+
+// Selalu mulai session untuk dapat mengakses dan menghancurkannya.
 session_start();
-$_SESSION = array();
-if (ini_get("session.use_cookies")) {
-    $params = session_get_cookie_params();
-    setcookie(session_name(), '', time() - 42000,
-        $params["path"], $params["domain"],
-        $params["secure"], $params["httponly"]
-    );
-}
+
+// Menghapus semua variabel session.
+session_unset();
+
+// Menghancurkan session.
 session_destroy();
-session_start();
-$_SESSION['login_error'] = "Anda telah berhasil logout";
+
+// Alihkan admin ke halaman login mereka setelah logout.
 header("Location: login.php");
 exit();
 ?>

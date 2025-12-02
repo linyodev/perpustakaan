@@ -1,15 +1,59 @@
-.btn-aksi {
-    padding: 5px 10px;
+/*
+|--------------------------------------------------------------------------
+| Stylesheet untuk Halaman Manajemen Pengguna (Admin)
+|--------------------------------------------------------------------------
+|
+| File ini berisi style khusus untuk halaman daftar pengguna di area admin.
+| Sebagian style mungkin sama dengan file manajemen lainnya, yang
+| menunjukkan adanya potensi untuk pengoptimalan di masa depan.
+|
+*/
+
+/* --- Tombol Aksi (Edit, Hapus) di dalam Tabel --- */
+/* Style ini diduplikasi dari admin_manajemen_buku.css */
+.action-links a {
+    padding: 6px 12px;
     text-decoration: none;
     border-radius: 4px;
     color: white;
-    margin-right: 5px;
+    margin: 0 4px;
     font-size: 0.9em;
+    display: inline-block;
 }
 
-.btn-aksi.edit {
+.btn-edit {
     background-color: #17a2b8;
 }
-.btn-aksi.hapus {
+.btn-edit:hover {
+    background-color: #138496;
+}
+
+.btn-delete {
     background-color: #dc3545;
+}
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+/* --- Tombol Aksi yang Dinonaktifkan --- */
+/* 
+  Style ini digunakan untuk tombol dari fitur yang belum selesai dibuat.
+  Ini memberikan visual feedback kepada admin bahwa tombolnya ada
+  tapi belum bisa digunakan.
+*/
+a.btn-edit-disabled, 
+a.btn-delete-disabled {
+    background-color: #6c757d; /* Warna abu-abu */
+    cursor: not-allowed; /* Tanda cursor 'dilarang' */
+    pointer-events: none; /* Menonaktifkan semua interaksi klik */
+}
+
+/* --- Penyesuaian Kolom Tabel --- */
+/* 
+  Style ini khusus untuk kolom ketiga (email) di tabel data.
+  'word-break: break-all' memastikan email yang sangat panjang
+  tidak akan merusak layout tabel dan akan dipatahkan ke baris baru.
+*/
+.data-table td:nth-child(3) {
+    word-break: break-all;
 }

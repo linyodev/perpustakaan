@@ -1,65 +1,82 @@
+/**
+ * @file
+ * Stylesheet khusus untuk halaman utama (home).
+ */
+
+/* Kontainer utama untuk halaman home */
 .home-wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+    /* Menggunakan container dari global.css, jadi ini bisa di-override atau dihapus */
+    padding: 0;
+    background-color: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
-/* Hero Section */
+/* == Hero Section == */
+/* Bagian paling atas yang berisi sambutan utama */
 .home-hero {
     text-align: center;
-    padding: 60px 20px;
-    background-color: #f8f9fa;
+    padding: 80px 20px;
+    background-color: #0056b3; /* Warna biru yang lebih gelap */
+    background-image: linear-gradient(to right, #0056b3, #007bff);
+    color: white;
     border-radius: 12px;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
 }
 
 .hero-content h1 {
     font-size: 3rem;
-    color: #343a40;
+    font-weight: 700;
     margin-bottom: 15px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 }
 
 .hero-content p {
     font-size: 1.25rem;
-    color: #6c757d;
     max-width: 650px;
     margin: 0 auto 30px auto;
+    opacity: 0.9;
 }
 
-.hero-content .btn {
+.hero-content .btn-primary {
     padding: 15px 35px;
     font-size: 1.1rem;
-    text-decoration: none;
-    border-radius: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 30px;
     transition: transform 0.2s, box-shadow 0.2s;
+    background-color: #fff;
+    color: #007bff;
+    border: 2px solid #fff;
 }
 
-.hero-content .btn:hover {
+.hero-content .btn-primary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    background-color: #fff;
+    color: #0056b3;
 }
 
-.btn-primary {
-    background-color: #007bff;
-    color: white;
-}
-
-/* Featured Books Section */
+/* == Featured Books Section == */
+/* Bagian untuk menampilkan buku-buku unggulan */
 .featured-books {
     margin-bottom: 50px;
 }
 
 .section-title {
     text-align: center;
-    font-size: 2rem;
+    font-size: 2.2rem;
     color: #343a40;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
 .books-carousel {
     display: grid;
+    /* Grid responsif untuk menampilkan buku */
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 25px;
+    gap: 30px;
 }
 
 .book-item a {
@@ -69,16 +86,16 @@
 
 .book-item .book-cover {
     height: 250px;
-    background-color: #e9ecef;
     border-radius: 8px;
     margin-bottom: 15px;
     overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .book-item .book-cover:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
 }
 
 .book-item .book-cover img {
@@ -100,17 +117,19 @@
 }
 
 
-/* CTA Section */
+/* == Call to Action (CTA) Section == */
+/* Bagian ajakan untuk mendaftar */
 .home-cta {
     text-align: center;
     padding: 50px 20px;
-    background-color: #343a40;
-    color: white;
+    background-color: #f8f9fa;
     border-radius: 12px;
+    border: 1px solid #e9ecef;
 }
 
 .cta-content h2 {
     font-size: 2rem;
+    color: #343a40;
     margin-bottom: 15px;
 }
 
@@ -120,26 +139,30 @@
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
-    opacity: 0.9;
+    color: #6c757d;
 }
 
 .btn-secondary {
-    background-color: #007bff;
+    background-color: #28a745; /* Warna hijau untuk CTA */
     color: white;
     padding: 15px 35px;
     font-size: 1.1rem;
     text-decoration: none;
-    border-radius: 8px;
-    transition: background-color 0.3s;
+    border-radius: 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 .btn-secondary:hover {
-    background-color: #0056b3;
+    background-color: #218838;
+    transform: translateY(-2px);
 }
 
+/* Media Query untuk layar yang lebih kecil */
 @media (max-width: 768px) {
     .hero-content h1 {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
     .books-carousel {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));

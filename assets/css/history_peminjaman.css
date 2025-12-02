@@ -1,21 +1,37 @@
-.status-badge {
-    padding: 5px 10px;
-    border-radius: 12px;
-    color: #fff;
-    font-size: 0.85em;
-    font-weight: bold;
+/**
+ * @file
+ * Stylesheet khusus untuk halaman riwayat peminjaman pengguna.
+ */
+
+/* Penyesuaian untuk tabel di halaman riwayat */
+.data-table {
+    margin-top: 25px;
 }
 
-.status-badge.dipinjam {
-    background-color: #ffc107;
-    color: #333;
-}
-.status-badge.dikembalikan {
-
-    background-color: #28a745;
+/* Sel untuk tombol aksi agar kontennya di tengah */
+.action-cell {
+    text-align: center;
 }
 
-.status-badge.kembali {
-        background-color: #ffc107;
-    color: #333;
+/* Tombol untuk cetak invoice */
+.btn-invoice {
+    background: #17a2b8; /* Info */
+    padding: 6px 12px;
+    font-size: 14px;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
 }
+
+.btn-invoice:hover {
+    background-color: #138496;
+}
+
+/* 
+   == Badge Status ==
+   Style untuk badge status peminjaman.
+   Class ini sudah didefinisikan di global.css.
+   Idealnya, style ini tidak perlu di-override di sini kecuali
+   jika ada perbedaan tampilan yang spesifik untuk halaman ini.
+*/
