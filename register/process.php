@@ -43,8 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // 1. Validasi Nama
     if (!validasiWajibDiisi($nama)) {
         $errors['nama'] = 'Nama tidak boleh kosong.';
-    } elseif (!validasiPanjangMaks($nama, 100)) {
-        $errors['nama'] = 'Nama terlalu panjang (maksimal 100 karakter).';
     }
 
     // 2. Validasi Email
@@ -75,6 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['password2'] = 'Konfirmasi password tidak boleh kosong.';
     } elseif ($password !== $password2) {
         $errors['password2'] = 'Konfirmasi password tidak cocok.';
+    } elseif (!validasiTanpaHtml($password)) {
+        $errors['password2'] = 'Format password tidak valid, dilarang menggunakan tag HTML.';
+
     }
 
     // --- Pengambilan Keputusan ---
