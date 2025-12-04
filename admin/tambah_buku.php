@@ -138,12 +138,12 @@ include('../templates/header.php');
         <div class="form-group">
             <label for="judul">Judul Buku <span class="required">*</span></label>
             <!-- Tampilkan kembali data yang sudah diinput jika terjadi error -->
-            <input type="text" id="judul" name="judul" value="<?php echo htmlspecialchars($_POST['judul'] ?? ''); ?>" required>
+            <input type="text" id="judul" name="judul" value="<?php echo htmlspecialchars($_POST['judul'] ?? ''); ?>" >
         </div>
         
         <div class="form-group">
             <label for="penulis">Penulis <span class="required">*</span></label>
-            <input type="text" id="penulis" name="penulis" value="<?php echo htmlspecialchars($_POST['penulis'] ?? ''); ?>" required>
+            <input type="text" id="penulis" name="penulis" value="<?php echo htmlspecialchars($_POST['penulis'] ?? ''); ?>" >
         </div>
         
         <div class="form-group">
@@ -153,12 +153,12 @@ include('../templates/header.php');
         
         <div class="form-group">
             <label for="tahun_terbit">Tahun Terbit <span class="required">*</span></label>
-            <input type="text" id="tahun_terbit" name="tahun_terbit" value="<?php echo htmlspecialchars($_POST['tahun_terbit'] ?? ''); ?>" required placeholder="YYYY">
+            <input type="text" id="tahun_terbit" name="tahun_terbit" value="<?php echo htmlspecialchars($_POST['tahun_terbit'] ?? ''); ?>" >
         </div>
         
         <div class="form-group">
             <label for="jumlah">Jumlah Stok <span class="required">*</span></label>
-            <input type="number" id="jumlah" name="jumlah" value="<?php echo htmlspecialchars($_POST['jumlah'] ?? '1'); ?>" required min="0">
+            <input type="text" id="jumlah" name="jumlah" value="<?php echo htmlspecialchars($_POST['jumlah'] ?? '1'); ?>" >
         </div>
 
         <div class="form-group">
@@ -168,7 +168,7 @@ include('../templates/header.php');
 
         <div class="form-group">
             <label for="sampul">Sampul Buku</label>
-            <input type="file" id="sampul" name="sampul" accept="image/jpeg,image/png,image/webp">
+            <input type="text" id="sampul" name="sampul" >
             <small class="form-hint">Format: JPG, PNG, WebP. Maksimal 2MB.</small>
         </div>
         

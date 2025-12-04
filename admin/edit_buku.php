@@ -168,12 +168,12 @@ include('../templates/header.php');
         <!-- Semua nilai (value) input diisi dengan data dari variabel $buku. -->
         <div class="form-group">
             <label for="judul">Judul Buku <span class="required">*</span></label>
-            <input type="text" id="judul" name="judul" value="<?php echo htmlspecialchars($buku['judul'] ?? ''); ?>" required>
+            <input type="text" id="judul" name="judul" value="<?php echo htmlspecialchars($buku['judul'] ?? ''); ?>" >
         </div>
         
         <div class="form-group">
             <label for="penulis">Penulis <span class="required">*</span></label>
-            <input type="text" id="penulis" name="penulis" value="<?php echo htmlspecialchars($buku['penulis'] ?? ''); ?>" required>
+            <input type="text" id="penulis" name="penulis" value="<?php echo htmlspecialchars($buku['penulis'] ?? ''); ?>" >
         </div>
         
         <div class="form-group">
@@ -183,12 +183,12 @@ include('../templates/header.php');
         
         <div class="form-group">
             <label for="tahun_terbit">Tahun Terbit <span class="required">*</span></label>
-            <input type="text" id="tahun_terbit" name="tahun_terbit" value="<?php echo htmlspecialchars($buku['tahun_terbit'] ?? ''); ?>" required placeholder="YYYY">
+            <input type="text" id="tahun_terbit" name="tahun_terbit" value="<?php echo htmlspecialchars($buku['tahun_terbit'] ?? ''); ?>" >
         </div>
         
         <div class="form-group">
             <label for="jumlah">Jumlah Stok <span class="required">*</span></label>
-            <input type="number" id="jumlah" name="jumlah" value="<?php echo htmlspecialchars($buku['jumlah'] ?? ''); ?>" required min="0">
+            <input type="text" id="jumlah" name="jumlah" value="<?php echo htmlspecialchars($buku['jumlah'] ?? ''); ?>" >
         </div>
 
         <div class="form-group">
@@ -204,9 +204,9 @@ include('../templates/header.php');
                     <img src="../assets/uploads/<?php echo htmlspecialchars($buku['sampul']); ?>" alt="Sampul saat ini" style="max-width: 150px; margin-bottom: 10px; border-radius: 4px;">
                 </div>
             <?php endif; ?>
-            <input type="file" id="sampul" name="sampul" accept="image/jpeg,image/png,image/webp">
+            <input type="text" id="sampul" name="sampul" >
             <!-- Kirim nama sampul lama untuk proses penghapusan jika diganti. -->
-            <input type="hidden" name="sampul_lama" value="<?php echo htmlspecialchars($buku['sampul'] ?? ''); ?>">
+            <input type="text" name="sampul_lama" value="<?php echo htmlspecialchars($buku['sampul'] ?? ''); ?>">
             <small class="form-hint">Kosongkan jika tidak ingin mengubah sampul.</small>
         </div>
         

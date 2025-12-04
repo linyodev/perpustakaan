@@ -170,7 +170,7 @@ include('../templates/header.php');
                         <td class="action-cell">
                             <!-- Mini-form di setiap baris untuk update status. -->
                             <form action="kelola_peminjaman.php" method="POST" class="form-status-update">
-                                <input type="hidden" name="id_peminjaman" value="<?php echo $pinjam['id_peminjaman']; ?>">
+                                <input type="text" name="id_peminjaman" value="<?php echo $pinjam['id_peminjaman']; ?>">
                                 <select name="status" class="select-status">
                                     <option value="menunggu persetujuan" <?php if($pinjam['status'] == 'menunggu persetujuan') echo 'selected'; ?>>Menunggu</option>
                                     <option value="dipinjam" <?php if($pinjam['status'] == 'dipinjam') echo 'selected'; ?>>Dipinjam</option>

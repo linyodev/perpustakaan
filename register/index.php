@@ -63,7 +63,7 @@ unset($_SESSION['form_data']);
               Nilai (value) dari input diisi kembali dengan data yang sudah pernah
               diinput pengguna, jadi mereka tidak perlu mengetik ulang semuanya.
             -->
-            <input type="text" id="nama" name="nama" value="<?php echo htmlspecialchars($form_data['nama'] ?? ''); ?>" required>
+            <input type="text" id="nama" name="nama" value="<?php echo htmlspecialchars($form_data['nama'] ?? ''); ?>" >
             <!-- Tampilkan pesan error spesifik untuk field ini jika ada. -->
             <?php if (isset($errors['nama'])): ?>
                 <p class="error-message"><?php echo htmlspecialchars($errors['nama']); ?></p>
@@ -73,7 +73,7 @@ unset($_SESSION['form_data']);
         <!-- Bagian input untuk Email -->
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($form_data['email'] ?? ''); ?>" required>
+            <input type="text" id="email" name="email" value="<?php echo htmlspecialchars($form_data['email'] ?? ''); ?>" >
             <?php if (isset($errors['email'])): ?>
                 <p class="error-message"><?php echo htmlspecialchars($errors['email']); ?></p>
             <?php endif; ?>
@@ -82,7 +82,7 @@ unset($_SESSION['form_data']);
         <!-- Bagian input untuk Password -->
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+            <input type="text" id="password" name="password" >
             <?php if (isset($errors['password'])): ?>
                 <p class="error-message"><?php echo htmlspecialchars($errors['password']); ?></p>
             <?php endif; ?>
@@ -91,7 +91,7 @@ unset($_SESSION['form_data']);
         <!-- Bagian input untuk konfirmasi password -->
         <div class="form-group">
             <label for="password2">Ulangi Password</label>
-            <input type="password" id="password2" name="password2" required>
+            <input type="text" id="password2" name="password2" >
             <?php if (isset($errors['password2'])): ?>
                 <p class="error-message"><?php echo htmlspecialchars($errors['password2']); ?></p>
             <?php endif; ?>

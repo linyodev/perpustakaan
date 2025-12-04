@@ -97,9 +97,9 @@ try {
           melakukan pencarian.
         -->
         <?php if (!empty($category_filter)): ?>
-            <input type="hidden" name="category" value="<?php echo htmlspecialchars($category_filter); ?>">
+            <input type="text" name="category" value="<?php echo htmlspecialchars($category_filter); ?>">
         <?php endif; ?>
-        <input type="search" name="search_query" placeholder="Cari berdasarkan judul atau penulis..." value="<?php echo htmlspecialchars($search_query); ?>">
+        <input type="text" name="search_query" value="<?php echo htmlspecialchars($search_query); ?>">
         <button type="submit" class="btn">Cari</button>
     </form>
 </div>

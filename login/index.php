@@ -55,12 +55,12 @@ include('../templates/header.php');
     <form action="process.php" method="POST">
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
+            <input type="text" id="email" name="email" >
         </div>
         
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+            <input type="text" id="password" name="password" >
         </div>
         
         <button type="submit" class="btn">Login</button>

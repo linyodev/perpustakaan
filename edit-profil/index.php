@@ -172,15 +172,15 @@ include('../templates/header.php');
         <!-- Bagian Informasi Pribadi -->
         <div class="form-group">
             <label for="nama">Nama Lengkap</label>
-            <input type="text" id="nama" name="nama" value="<?php echo htmlspecialchars($user_data['nama']); ?>" required>
+            <input type="text" id="nama" name="nama" value="<?php echo htmlspecialchars($user_data['nama']); ?>" >
         </div>
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user_data['email']); ?>" required>
+            <input type="text" id="email" name="email" value="<?php echo htmlspecialchars($user_data['email']); ?>" >
         </div>
         <div class="form-group">
             <label for="no_hp">No. HP</label>
-            <input type="tel" id="no_hp" name="no_hp" value="<?php echo htmlspecialchars($user_data['no_hp'] ?? ''); ?>" placeholder="Contoh: 081234567890">
+            <input type="text" id="no_hp" name="no_hp" value="<?php echo htmlspecialchars($user_data['no_hp'] ?? ''); ?>" >
         </div>
          <div class="form-group">
             <label for="alamat">Alamat</label>
@@ -193,11 +193,11 @@ include('../templates/header.php');
         <p class="section-title"><strong>Ubah Password (opsional)</strong></p>
         <div class="form-group">
             <label for="current_password">Password Saat Ini</label>
-            <input type="password" id="current_password" name="current_password" placeholder="Isi untuk mengubah password">
+            <input type="text" id="current_password" name="current_password" >
         </div>
         <div class="form-group">
             <label for="new_password">Password Baru</label>
-            <input type="password" id="new_password" name="new_password" placeholder="Minimal 8 karakter">
+            <input type="text" id="new_password" name="new_password" >
         </div>
         
         <button type="submit" class="btn">Simpan Perubahan</button>
